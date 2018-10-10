@@ -5,15 +5,7 @@ const common = require('./webpack.common.js');
 
 module.exports = merge(common, {
     devtool: 'inline-source-map',
-    devServer: {//提供虚拟服务器
+    devServer: {//虚拟服务器
         contentBase: './dist'
-    },
-    module: {
-        rules: [
-            {
-                test: /\.css$/,
-                use: ['style-loader', 'css-loader']
-            }
-        ]
     }
 });
