@@ -2,7 +2,7 @@
 const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-
+//配置HtmlWebpackPlugin项
 var getHtmlConfig = function (name, title) {
     return {
         template: 'src/' + name + '.html',
@@ -30,7 +30,7 @@ module.exports = {
     module: {
         rules: [
             {test: /.css$/, use: ['style-loader', 'css-loader']},
-            {test: /.(jpg|png|gif|svg)$/, use: ['url-loader?limit=8192&name=./[name].[ext]']},
+            {test: /.(jpg|png|gif|svg)$/, use: ['file-loader']},
             {test: /.less$/, use: ['style-loader', 'css-loader', 'less-loader']},
             {
                 test: /\.js$/,
