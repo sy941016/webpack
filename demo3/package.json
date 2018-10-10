@@ -1,0 +1,34 @@
+{
+  "name": "my_webpack01",
+  "sideEffects": false,
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config webpack.prod.js",
+    "watch": "webpack --watch",
+    "start": "webpack-dev-server --open --config webpack.dev.js",
+    "server": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "clean-webpack-plugin": "^0.1.19",
+    "css-loader": "^1.0.0",
+    "express": "^4.16.3",
+    "html-webpack-plugin": "^3.2.0",
+    "style-loader": "^0.23.0",
+    "uglifyjs-webpack-plugin": "^2.0.1",
+    "webpack": "^4.17.2",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-middleware": "^3.2.0",
+    "webpack-dev-server": "^3.1.8",
+    "webpack-merge": "^4.1.4"
+  },
+  "dependencies": {
+    "lodash": "^4.17.10"
+  },
+  "main": "dev-server.js",
+  "description": ""
+}
