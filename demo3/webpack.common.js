@@ -54,11 +54,6 @@ module.exports = {
         new HtmlWebpackPlugin(getHtmlConfig('index', 'index')),
         new HtmlWebpackPlugin(getHtmlConfig('paging/index_a', 'index_a')),
         new HtmlWebpackPlugin(getHtmlConfig('paging/index_b', 'index_b')),
-        new HtmlWebpackPlugin(getHtmlConfig('paging/index_c', 'index_c')),
-        new webpack.ProvidePlugin({
-            $: "jquery",
-            jQuery: "jquery",
-            "window.jQuery": "jquery"
-        })
+        new HtmlWebpackPlugin(getHtmlConfig('paging/index_c', 'index_c'))
     ]
 };
