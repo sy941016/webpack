@@ -17,24 +17,20 @@ var getHtmlConfig = function (name, title) {
 
 
 module.exports = {
+    //这里应用程序开始执行,webpack 开始打包
     entry: {
         index: './src/js/index.js',
         index_a: './src/js/index.js',
         index_b: './src/js/index.js',
         index_c: './src/js/index.js'
     },
-    plugins: [
-        new CleanWebpackPlugin(['dist']),
-        new HtmlWebpackPlugin(getHtmlConfig('index', 'index')),
-        new HtmlWebpackPlugin(getHtmlConfig('paging/index_a', 'index_a')),
-        new HtmlWebpackPlugin(getHtmlConfig('paging/index_b', 'index_b')),
-        new HtmlWebpackPlugin(getHtmlConfig('paging/index_c', 'index_c'))
-    ],
+    //webpack 如何输出结果的相关选项
     output: {
         filename: '[name].bundle.js',
         path: path.resolve(__dirname, 'dist'),
         publicPath: '' // 输出解析文件的目录，url 相对于 HTML 页面
     },
+    // 模块配置
     module: {
         rules: [
             {test: /.css$/, use: ['style-loader', 'css-loader']},
@@ -51,5 +47,13 @@ module.exports = {
                 }
             }
         ]
-    }
+    },
+    //附加插件列表
+    plugins: [
+        new CleanWebpackPlugin(['dist']),
+        new HtmlWebpackPlugin(getHtmlConfig('index', 'index')),
+        new HtmlWebpackPlugin(getHtmlConfig('paging/index_a', 'index_a')),
+        new HtmlWebpackPlugin(getHtmlConfig('paging/index_b', 'index_b')),
+        new HtmlWebpackPlugin(getHtmlConfig('paging/index_c', 'index_c'))
+    ]
 };
