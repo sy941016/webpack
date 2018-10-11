@@ -2,10 +2,11 @@
 const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const dev = false;
 //配置HtmlWebpackPlugin项
 var getHtmlConfig = function (name, title) {
     return {
-        template: 'src/' + name + '.html',
+        template: 'src/view/' + name + '.html',
         filename: '' + name + '.html',
         title: title,
         inject: true,
@@ -17,15 +18,22 @@ var getHtmlConfig = function (name, title) {
 
 module.exports = {
     entry: {
-        index: './src/js/index.js'
+        index: './src/js/index.js',
+        index_a: './src/js/index.js',
+        index_b: './src/js/index.js',
+        index_c: './src/js/index.js'
     },
     plugins: [
         new CleanWebpackPlugin(['dist']),
-        new HtmlWebpackPlugin(getHtmlConfig('index', 'demo3'))
+        new HtmlWebpackPlugin(getHtmlConfig('index', 'index')),
+        new HtmlWebpackPlugin(getHtmlConfig('paging/index_a', 'index_a')),
+        new HtmlWebpackPlugin(getHtmlConfig('paging/index_b', 'index_b')),
+        new HtmlWebpackPlugin(getHtmlConfig('paging/index_c', 'index_c'))
     ],
     output: {
         filename: '[name].bundle.js',
-        path: path.resolve(__dirname, 'dist')
+        path: path.resolve(__dirname, 'dist'),
+        publicPath: '' // 输出解析文件的目录，url 相对于 HTML 页面
     },
     module: {
         rules: [
