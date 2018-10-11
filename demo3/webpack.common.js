@@ -3,6 +3,7 @@ const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const dev = false;
+
 //配置HtmlWebpackPlugin项
 var getHtmlConfig = function (name, title) {
     return {
@@ -14,7 +15,6 @@ var getHtmlConfig = function (name, title) {
         chunks: [name]
     }
 };
-
 
 module.exports = {
     //这里应用程序开始执行,webpack 开始打包
@@ -54,6 +54,11 @@ module.exports = {
         new HtmlWebpackPlugin(getHtmlConfig('index', 'index')),
         new HtmlWebpackPlugin(getHtmlConfig('paging/index_a', 'index_a')),
         new HtmlWebpackPlugin(getHtmlConfig('paging/index_b', 'index_b')),
-        new HtmlWebpackPlugin(getHtmlConfig('paging/index_c', 'index_c'))
+        new HtmlWebpackPlugin(getHtmlConfig('paging/index_c', 'index_c')),
+        new webpack.ProvidePlugin({
+            $: "jquery",
+            jQuery: "jquery",
+            "window.jQuery": "jquery"
+        })
     ]
 };
