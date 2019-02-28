@@ -1,5 +1,5 @@
 {
-  "name": "my_webpack01",
+  "name": "my_webpack",
   "sideEffects": false,
   "version": "1.0.0",
   "private": true,
@@ -7,8 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --config webpack.prod.js",
     "watch": "webpack --watch",
-    "start": "webpack-dev-server --open --config webpack.dev.js",
-    "server": "node server.js"
+    "start": "webpack-dev-server --open --config webpack.dev.js"
   },
   "keywords": [],
   "author": "",
