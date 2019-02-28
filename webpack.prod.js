@@ -1,4 +1,4 @@
-//引入UglifyJSPlugin
+//发布环境   生成dist 配置node启动dist
 
 const webpack = require('webpack');
 const merge = require('webpack-merge');

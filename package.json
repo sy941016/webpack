@@ -4,10 +4,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --config webpack.prod.js",
     "watch": "webpack --watch",
-    "start": "webpack-dev-server --open --config webpack.dev.js"
+    "start": "webpack-dev-server --open --host localhost --port 1234 --config webpack.dev.js",
+    "dev": "node ./app.js"
   },
   "keywords": [],
   "author": "",
@@ -36,6 +36,6 @@
     "babel-preset-env": "^1.7.0",
     "lodash": "^4.17.10"
   },
-  "main": "dev-server.js",
+  "main": "",
   "description": ""
 }
