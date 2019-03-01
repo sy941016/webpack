@@ -1,5 +1,6 @@
 // 设置 entry 和 output 配置，并且在其中引入这两个环境公用的全部插件
 const path = require('path');
+const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
@@ -18,10 +19,7 @@ var getHtmlConfig = function (name, title) {
 module.exports = {
     //这里应用程序开始执行,webpack 开始打包
     entry: {
-        index: './src/js/index.js',
-        index_a: './src/js/index.js',
-        index_b: './src/js/index.js',
-        index_c: './src/js/index.js'
+        index: './src/js/index.js'
     },
     //webpack 如何输出结果的相关选项
     output: {
@@ -34,7 +32,16 @@ module.exports = {
         rules: [
             {test: /.css$/, use: ['style-loader', 'css-loader']},
             {test: /.(jpg|png|gif|svg)$/, use: ['file-loader']},
-            {test: /.less$/, use: ['style-loader', 'css-loader', 'less-loader']},
+            {
+                test: /\.scss$/,
+                use: [{
+                    loader: "style-loader" //将 JS 字符串生成为 style 节点
+                }, {
+                    loader: "css-loader" //将 CSS 转化成 CommonJS 模块
+                }, {
+                    loader: "sass-loader" //将 Sass 编译成 CSS
+                }]
+            },
             {
                 test: /\.js$/,
                 exclude: /(node_modules|bower_components)/,
@@ -53,6 +60,7 @@ module.exports = {
         new HtmlWebpackPlugin(getHtmlConfig('index', 'index')),
         new HtmlWebpackPlugin(getHtmlConfig('paging/index_a', 'index_a')),
         new HtmlWebpackPlugin(getHtmlConfig('paging/index_b', 'index_b')),
-        new HtmlWebpackPlugin(getHtmlConfig('paging/index_c', 'index_c'))
+        new HtmlWebpackPlugin(getHtmlConfig('paging/index_c', 'index_c')),
+        new webpack.HotModuleReplacementPlugin()    //引入热更新插件
     ]
 };
