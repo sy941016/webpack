@@ -24,8 +24,8 @@ module.exports = {
     //webpack 如何输出结果的相关选项
     output: {
         filename: '[name].bundle.js',
-        path: path.resolve(__dirname, 'dist'),
-        publicPath: '' // 输出解析文件的目录，url 相对于 HTML 页面
+        path: path.resolve(__dirname, 'dist'),//所有输出文件的目标路径
+        publicPath: '' // 输出解析文件的目录
     },
     // 模块配置
     module: {
