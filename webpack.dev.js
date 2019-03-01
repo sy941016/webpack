@@ -6,7 +6,7 @@ const common = require('./webpack.common.js');
 
 module.exports = merge(common, {
     devtool: 'inline-source-map',
-    ///虚拟服务器
+    //虚拟服务器
     devServer: {
         //使用 HTML5 History API 时，任意的 404 响应都可能需要被替代为 index.html
         historyApiFallback: {
