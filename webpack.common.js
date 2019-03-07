@@ -19,7 +19,7 @@ var getHtmlConfig = function (name, title) {
 module.exports = {
     //这里应用程序开始执行,webpack 开始打包
     entry: {
-        index: './src/js/index.js'
+        index: './src/js/index.js'  //入口文件
     },
     //webpack 如何输出结果的相关选项
     output: {
@@ -61,6 +61,9 @@ module.exports = {
         new HtmlWebpackPlugin(getHtmlConfig('paging/index_a', 'index_a')),
         new HtmlWebpackPlugin(getHtmlConfig('paging/index_b', 'index_b')),
         new HtmlWebpackPlugin(getHtmlConfig('paging/index_c', 'index_c')),
-        new webpack.HotModuleReplacementPlugin()    //引入热更新插件
+        new webpack.HotModuleReplacementPlugin(),    //引入热更新插件
+        new webpack.ProvidePlugin({
+           //自动加载模块，而不必到处 import 或 require
+        })
     ]
 };
