@@ -1,9 +1,9 @@
 //发布环境
 //流程 生成dist 配置node启动dist
-
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+//const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 process.env.NODE_ENV = 'production'
 const common = require('./webpack.common.js');
 
