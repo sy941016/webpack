@@ -4,7 +4,8 @@ const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');//清理dist
 const HtmlWebpackPlugin = require('html-webpack-plugin');//创建html
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');//单独打包css
-const devMode = process.env.NODE_ENV !== 'production'
+
+const devMode = process.env.NODE_ENV !== 'production'  //非生产环境标识
 
 //配置HtmlWebpackPlugin项
 var getHtmlConfig = function (name, title) {
