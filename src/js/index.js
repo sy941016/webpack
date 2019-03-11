@@ -1,8 +1,10 @@
 require('../css/style.css');
-
-function component() {
-    let element = document.createElement('pre');
-    element.innerHTML = 'Hello webpack!'
-    return element;
+let h_height = $('.header').height();
+let f_height = $('.footer').height();
+let changeDivHeight = function () {
+    let wh = $(window).height();
+    let mh = wh - h_height - f_height;
+    $('.box').css('min-height', mh);
+    console.log(mh)
 }
-$('.demo').append(component());
+changeDivHeight();

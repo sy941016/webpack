@@ -8,11 +8,10 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');//单独打包cs
 const devMode = process.env.NODE_ENV !== 'production'  //非生产环境标识
 
 //配置HtmlWebpackPlugin项
-var getHtmlConfig = function (name, title) {
+var getHtmlConfig = function (name) {
     return {
         template: 'src/view/' + name + '.html',
         filename: (devMode ? '' : '../') + name + '.html',
-        title: title,
         inject: true,
         hash: true,
         minify: {
@@ -65,16 +64,21 @@ module.exports = {
                         presets: ['@babel/preset-env']
                     }
                 }
+            },
+            {
+                test: /\.html$/,
+                // html中的img标签,提供html的include子页面功能
+                use: ['html-withimg-loader']
             }
         ]
     },
     //附加插件列表
     plugins: [
         new CleanWebpackPlugin(['dist']),
-        new HtmlWebpackPlugin(getHtmlConfig('index', '主页')),
-        new HtmlWebpackPlugin(getHtmlConfig('a', 'a页面')),
-        new HtmlWebpackPlugin(getHtmlConfig('b', 'b页面')),
-        new HtmlWebpackPlugin(getHtmlConfig('c', 'c页面')),
+        new HtmlWebpackPlugin(getHtmlConfig('index')),
+        new HtmlWebpackPlugin(getHtmlConfig('a')),
+        new HtmlWebpackPlugin(getHtmlConfig('b')),
+        new HtmlWebpackPlugin(getHtmlConfig('c')),
         new webpack.HotModuleReplacementPlugin(),    //引入热更新插件
         new webpack.ProvidePlugin({
             //自动加载模块
