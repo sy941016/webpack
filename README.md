@@ -200,9 +200,9 @@ module.exports = {
   ]
 }
 ```
-package.json
-```
 + sideEffects
+```
+// package.json
 {
     "sideEffects": false,
     //"sideEffect": ["./src/common/polyfill.js"]
