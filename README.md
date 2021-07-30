@@ -1,6 +1,6 @@
 #### Webpack
 ##### 安装
-   + npm init -y   --生成package.json
+   + npm init -y
    + npm install webpack webpack-cli -D
 
 ##### source map 追踪错误和警告  
@@ -110,7 +110,6 @@ npm install compression-webpack-plugin -D
 plugins: [new CompressionPlugin()]
 ```
 
-
 ###### 开发
 + webpack-dev-server  
 提供了web 服务器  
@@ -185,6 +184,7 @@ const path = require('path');
 ```
 ##### Tree-shaking   
 去除那些引用的但却没有使用的代码
++ uglifyjs-webpack-plugin
 ```
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 const path = require('path')
@@ -202,6 +202,7 @@ module.exports = {
 ```
 package.json
 ```
++ sideEffects
 {
     "sideEffects": false,
     //"sideEffect": ["./src/common/polyfill.js"]
