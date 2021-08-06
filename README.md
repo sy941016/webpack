@@ -110,7 +110,6 @@ npm install compression-webpack-plugin -D
 plugins: [new CompressionPlugin()]
 ```
 
-###### 开发
 + webpack-dev-server  
 提供了web 服务器  
 npm install -D webpack-dev-server
