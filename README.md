@@ -1,5 +1,5 @@
-#### Webpack
-##### 原理
+### Webpack
+#### 原理
 1. 初始化：启动构建，读取与合并配置参数，加载 Plugin，实例化 Compiler
 2. 编译：从 Entry 出发，针对每个 Module 调用对应的 Loader 去翻译文件的内容，再找到该 Module 依赖的 Module，递归地进行编译处理
 3. 输出：将编译后的 Module 组合成 Chunk，将 Chunk 转换成文件，输出到文件系统中
@@ -18,14 +18,39 @@
 }
 ```
 
-##### 安装
+#### 安装
    + npm init -y   
    + npm install webpack webpack-cli -D
 
 ##### source map  
 将编译、打包、压缩后的代码映射回源代码的过程  
 
-##### Loders
+##### Loders  
+将规则放在 ==oneOf== 属性中，则一旦匹配到某个规则后，就停止匹配了
+```
+{
+    //  以下loader一种文件只会匹配一个 
+    oneOf: [
+        // 不能有两个配置处理同一种类型文件，如果有，另外一个规则要放到外面
+        {
+            test: /\.js$/,
+            exclude: /node_modules/,
+            use: [
+                {
+                    loader: "babel-loader",
+                },
+            ],
+        },
+        {
+            test: /\.css$/,
+            use: [
+                "style-loader",
+                "css-loader",
+            ],
+        },
+    ],
+}
+```
 + css  
 npm install -D style-loader css-loader
 + 文件  
@@ -353,3 +378,6 @@ module.exports = class sy {
     }
 }
 ```
+###### 5. HMR
+1. WDS与浏览器之间维护了一个Websocket，当本地资源发生变化时，WDS 向浏览器推送更新，并带上构建时的hash，让客户端与上一次资源进行对比
+2. 客户端对比出差异后会向 WDS 发起 Ajax 请求来获取更改内容
