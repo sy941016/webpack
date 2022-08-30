@@ -181,11 +181,9 @@ smart(base,{
 
 ##### Code Splitting  
 将代码打包生成多个bundle,实现按需加载或并行加载多个bundle  
-==减少首次访问白屏时间，按需加载==
-+ 多entry
-```js
-const path = require('path');
+==减少首次访问白屏时间，按需加载==  
 
+```
 module.exports = {
   mode: 'development',
   entry: {
@@ -204,7 +202,6 @@ module.exports = {
 module.exports = {
     ...
     // page1和page2都import了loadsh，配置optimization后，loadsh代码被单独提取到一个bundle，否则会生成两份
-    // CommonsChunkPlugin已经废弃
     optimization: {
       splitChunks: {
         chunks: 'all'
@@ -225,8 +222,7 @@ module.exports = {
 }
 ```
 ##### Tree Shaking 
-静态分析程序流，判断那些模块和变量未被使用或者引用，进而删除对应代码  
-==去除引用的但却没有使用的代码==
+静态分析程序流，判断那些模块和变量未被使用或引用，然后删除对应代码  
 + uglifyjs-webpack-plugin
 ```
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
@@ -245,6 +241,7 @@ module.exports = {
 ```
 + sideEffects
 ```
+// 强制标识该包模块无副作用，只要没有被引用，整个模块/包就会被完整移除
 // package.json
 {
     "sideEffects": false,
