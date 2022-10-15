@@ -4,13 +4,15 @@
 2. 编译：从 Entry 出发，针对每个 Module 调用对应的 Loader 去翻译文件的内容，再找到该 Module 依赖的 Module，递归地进行编译处理
 3. 输出：将编译后的 Module 组合成 Chunk，将 Chunk 转换成文件，输出到文件系统中
 
-```
+```js
 {
-    mode,
-    entry,
-    output,
-    rules,
-    plugins,
+    mode, // 模式
+    entry, // 入口
+    output, // 输出
+    module: {
+      rules: [], // loader
+    },
+    plugins, // 插件
     resolve, // 解析模块的规则
     devServer, // 开发环境下配置
     optimization, // 生产环境下配置
@@ -18,83 +20,31 @@
 }
 ```
 
-#### 安装
-   + npm init -y   
-   + npm install webpack webpack-cli -D
-
 ##### source map  
 将编译、打包、压缩后的代码映射回源代码的过程  
 
 ##### Loders  
-将规则放在 ==oneOf== 属性中，则一旦匹配到某个规则后，就停止匹配了
++ style-loader css-loader  sass-loader  
+CSS
++  babel-loader  
+将es5 + 转 es5   
++ thread-loader  
+编译花费时间较长时使用(配置options的workers - 启动进程个数)
++ img
 ```
+//图片<10kb时，将其转为base64放在js中（可以减少网络请求数） 
 {
-    //  以下loader一种文件只会匹配一个 
-    oneOf: [
-        // 不能有两个配置处理同一种类型文件，如果有，另外一个规则要放到外面
-        {
-            test: /\.js$/,
-            exclude: /node_modules/,
-            use: [
-                {
-                    loader: "babel-loader",
-                },
-            ],
-        },
-        {
-            test: /\.css$/,
-            use: [
-                "style-loader",
-                "css-loader",
-            ],
-        },
-    ],
+	test: /\.(png|jpe?g|gif|svg?)$/,
+	type: 'asset',
+	parser: {
+		dataUrlCondition: {
+			maxSize: 10 * 1024
+		}
+	},
+	generator: {
+		filename: 'img/[hash:10][ext][query]'
+	}
 }
-```
-+ css  
-npm install -D style-loader css-loader
-+ 文件  
-npm install -D file-loader
-```
-rules:[
-   {
-    test: /.(jpg|png|gif|svg)$/,
-    use: {
-        loader:'file-loader',
-        options: {
-            limit:1200,
-            outputPath: 'img/',   //输出路径
-            publicPath: '../img', //生产环境--输出路径
-        }
-    }
-  }
-]
-```
-+ 将es5 + 转译为 es5   
-npm install -D babel-loader babel-core babel-preset-env webpack
-+ html-withimg-loader(图片打包,路径处理,html的include功能)  
-npm install html-withimg-loader
-```
-#include("./common/header.html")
-```
-```
-rules:[
-    {
-       test: /\.html$/,
-       use: ['html-withimg-loader']
-    }
-]
-```
-+ cache-loader 缓存
-+ thread-loader
-```
-// 编译花费时间较长时才需要使用 thread-loader
-{
-    loader: "thread-loader",
-    options: {
-        workers: 2, // 启动进程个数，默认是电脑cpu核数-1
-    },
-},
 ```
 
 ##### plugins插件
@@ -122,9 +72,7 @@ plugins:[
    new HtmlWebpackPlugin(getHtmlConfig())
 ]
 ```
-+ clean-webpack-plugin(清理 dist 文件夹)    
-npm install clean-webpack-plugin --save-dev
-+ ProvidePlugin  自动加载模块，而不必模块import或require
++ ProvidePlugin  自动加载模块
 ```
 plugins:[
    new webpack.ProvidePlugin({
@@ -132,8 +80,7 @@ plugins:[
    })
 ]
 ```
-+ mini-css-extract-plugin(单独打包css)  
-npm install mini-css-extract-plugin —D
++ mini-css-extract-plugin(将 CSS 提取到单独的文件中，为每个包含 CSS 的 JS 文件创建一个 CSS 文件，并支持 CSS 和 SourceMaps 的按需加载)  
 ```
 plugins:[
    new MiniCssExtractPlugin({
@@ -142,16 +89,23 @@ plugins:[
        chunkFilename: '' //未被列在entry中的(如：异步加载的)
    })
 ]
+module: {
+    rules: [
+      {
+        test: /\.css$/i,
+        use: [MiniCssExtractPlugin.loader, "css-loader"],
+      },
+    ],
+},
 ```
 + 开启gzip压缩  
-npm install compression-webpack-plugin -D
+compression-webpack-plugin
 ```
 plugins: [new CompressionPlugin()]
 ```
 
 + webpack-dev-server  
 提供了web 服务器  
-npm install -D webpack-dev-server
 ```
 devServer: {
     // 重定向
@@ -170,7 +124,6 @@ devServer: {
 
 ##### webpack-merge  
 配置抽离  
-npm install -D webpack-merge
 ```
 let { smart } = require('webpack-merge');
 
@@ -178,7 +131,7 @@ smart(base,{
     mode: 'production'
 })
 ```
-
+#### 优化
 ##### Code Splitting  
 将代码打包生成多个bundle,实现按需加载或并行加载多个bundle  
 ==减少首次访问白屏时间，按需加载==  
@@ -201,7 +154,7 @@ module.exports = {
 ```
 module.exports = {
     ...
-    // page1和page2都import了loadsh，配置optimization后，loadsh代码被单独提取到一个bundle，否则会生成两份
+    // page1和page2都引用loadsh，配置optimization后，loadsh被单独提取到一个bundle，否则会生成两份
     optimization: {
       splitChunks: {
         chunks: 'all'
@@ -214,8 +167,7 @@ module.exports = {
 module.exports = {
     output: {
        ...
-       // 添加chundkFilename
-       // 未列在 entry 中，却又需要被打包出来的文件的名称
+       // 未列在 entry 中，却又需被打包出来的文件名
        // 懒加载的代码
        chunkFilename: '[name].[chunkhash:5].chunk.js'
     }
@@ -249,10 +201,10 @@ module.exports = {
 }
 ```
 ##### Scope Hoisting  
-将所有模块的代码按照引用顺序放在一个函数作用域里，然后适当的重命名一些变量防止变量名冲突  
+将所有模块的代码按照引用顺序放在一个函数作用域里，通过适当的重命名防止变量名冲突  
 ==减少函数声明代码和内存开销==
 ```
-// 设置 mode: 'production' 是默认开启的
+// production默认开启
 module.exports = {
     ...
     plugins: [
@@ -262,38 +214,36 @@ module.exports = {
 }
 ```
 ##### DLL
-dll（动态链接库）：使用dll技术对公共库进行提前打包，可大大提升构建速度。公共库一般情况下是不会有改动的，所以这些模块只需要编译一次就可以了，并且可以提前打包好。在主程序后续构建时如果检测到该公共库已经通过dll打包了，就不再对其编译而是直接从动态链接库中获取  
+dll（动态链接库）：使用dll对公共库进行提前打包，可大大提升构建速度。公共库一般情况下不会有改动，这些模块只需要编译一次即可，所以可提前打包好。在主程序后续构建时如果检测到该公共库已通过dll打包了，就不再对其编译而是直接从动态链接库中获取  
 实现dll打包需要以下三步：  
-1. 抽取公共库，打包到一个或多个动态链接库中。
-2. 将打包好的动态链接库在页面中引入。
-3. 主程序使用了动态链接库中的公共库时，不能被打包入bundle，应该直接去动态链接库中获取。
+1. 抽取公共库，打包到一个或多个动态链接库中
+2. 将打包好的动态链接库在页面中引入
+3. 主程序使用了动态链接库中的公共库时，直接去动态链接库中获取
 
 ```
 // webpack.dll.js
 module.exports = {
-    // JS 执行入口文件
     entry: {
         // 把 vue 相关模块的放到一个单独的动态链接库
         vendor: ['vue', 'axios'],
         // 其他模块放到另一个动态链接库
-        other: ['jquery', 'lodash'],
+        other: ['lodash'],
     },
     output: {
-        // 输出的动态链接库的文件名称，[name] 代表当前动态链接库的名称（"vendor"和"other"）
+        // 输出的动态链接库名，[name] 代表当前动态链接库的名称（"vendor"和"other"）
         filename: '[name].dll.js',
-        // 输出的文件都放到 dist 目录下的dll文件夹中
+        // 输出的文件到dist/dll下
         path: path.resolve(__dirname, 'dist', "dll"),
-        // 存放动态链接库的向外暴露的变量名，例如对应 vendor 来说就是 _dll_vendor
+        // 动态链接库别名，例如 vendor => _dll_vendor
         library: '_dll_[name]',
     },
     plugins: [
-        //  打包生成一个mainfest.json文件。告诉webpack哪些库不参与后续的打包，已经通过dll事先打包好了。
+        //  生成mainfest.json后缀文件。告诉webpack哪些库不参与后续的打包，已经通过dll事先打包好了
         new webpack.DllPlugin({
-            // 动态链接库的库名，需要和 output.library 中保持一致
-            // 该字段的值也就是输出的 manifest.json 文件 中 name 字段的值
+            // 动态链接库的库名，需和 output.library 中保持一致
             // 例如 vendor.manifest.json 中就有 "name": "_dll_vendor"
             name: '_dll_[name]',
-            // 描述动态链接库的 manifest.json 文件输出时的文件名称
+            // manifest.json 文件输出时的文件名
             path: path.join(__dirname, 'dist', "dll", '[name].manifest.json'),
         }),
     ],
@@ -307,9 +257,8 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: "./index.html"
         }),
-        // 告诉 Webpack 使用了哪些动态链接库
         new webpack.DllReferencePlugin({
-            // manifest文件告诉webpack哪些库已经通过dll事先打包好了，后续构建直接去动态链接库里获取。
+            // manifest文件告诉webpack哪些库已经通过dll事先打包好了，后续构建直接去动态链接库里获取
             manifest: path.resolve(__dirname, "dist", "./dll/vendor.manifest.json"),
         }),
         new webpack.DllReferencePlugin({
