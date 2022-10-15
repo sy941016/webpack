@@ -49,7 +49,6 @@ CSS
 
 ##### plugins插件
 + html-webpack-plugin(创建 HTML 文件，用于服务器访问)  
-npm install -D html-webpack-plugin  
 html--title :  <%= htmlWebpackPlugin.options.title%>
 ```
 let getHtmlConfig = function (name,title) {
