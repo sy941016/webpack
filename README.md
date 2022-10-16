@@ -1,5 +1,5 @@
-### Webpack
-#### 原理
+#### Webpack
+##### 原理
 1. 初始化：启动构建，读取与合并配置参数，加载 Plugin，实例化 Compiler
 2. 编译：从 Entry 出发，针对每个 Module 调用对应的 Loader 去翻译文件的内容，再找到该 Module 依赖的 Module，递归地进行编译处理
 3. 输出：将编译后的 Module 组合成 Chunk，将 Chunk 转换成文件，输出到文件系统中
@@ -30,7 +30,7 @@ CSS
 将es5 + 转 es5   
 + thread-loader  
 编译花费时间较长时使用(配置options的workers - 启动进程个数)
-+ img
++ IMG
 ```
 //图片<10kb时，将其转为base64放在js中（可以减少网络请求数） 
 {
@@ -48,6 +48,7 @@ CSS
 ```
 
 ##### plugins插件
+###### HTML
 + html-webpack-plugin(创建 HTML 文件，用于服务器访问)  
 html--title :  <%= htmlWebpackPlugin.options.title%>
 ```
@@ -71,21 +72,14 @@ plugins:[
    new HtmlWebpackPlugin(getHtmlConfig())
 ]
 ```
-+ ProvidePlugin  自动加载模块
-```
-plugins:[
-   new webpack.ProvidePlugin({
-       identifier: 'module1'
-   })
-]
-```
+###### CSS
 + mini-css-extract-plugin(将 CSS 提取到单独的文件中，为每个包含 CSS 的 JS 文件创建一个 CSS 文件，并支持 CSS 和 SourceMaps 的按需加载)  
 ```
 plugins:[
    new MiniCssExtractPlugin({
        //解析文件名
        filename: '',     
-       chunkFilename: '' //未被列在entry中的(如：异步加载的)
+       chunkFilename: '' //未被列在entry中的(异步加载)
    })
 ]
 module: {
@@ -97,8 +91,36 @@ module: {
     ],
 },
 ```
-+ 开启gzip压缩  
-compression-webpack-plugin
++ css-minimizer-webpack-plugin(使用 cssnano 优化和压缩 CSS)
+```
+optimization: {
+    minimizer: [
+      new CssMinimizerPlugin(),
+    ],
+}
+```
+###### JS
++ terser-webpack-plugin(在生产环境下会默认开启js压缩，使用TerserWebpackPlugin)
+```
+// 也可自定义配置
+optimization: {
+    minimizer: [
+      new TerserPlugin({
+        ...
+      }),
+    ],
+}
+```
+###### OTHER
++ ProvidePlugin  自动加载模块
+```
+plugins:[
+   new webpack.ProvidePlugin({
+       identifier: 'module1'
+   })
+]
+```
++ compression-webpack-plugin(开启gzip压缩)  
 ```
 plugins: [new CompressionPlugin()]
 ```
@@ -122,7 +144,7 @@ devServer: {
 ```
 
 ##### webpack-merge  
-配置抽离  
+环境配置抽离  
 ```
 let { smart } = require('webpack-merge');
 
@@ -130,8 +152,8 @@ smart(base,{
     mode: 'production'
 })
 ```
-#### 优化
-##### Code Splitting  
+##### 优化
+###### Code Splitting  
 将代码打包生成多个bundle,实现按需加载或并行加载多个bundle  
 ==减少首次访问白屏时间，按需加载==  
 
@@ -172,7 +194,7 @@ module.exports = {
     }
 }
 ```
-##### Tree Shaking 
+###### Tree Shaking 
 静态分析程序流，判断那些模块和变量未被使用或引用，然后删除对应代码  
 + uglifyjs-webpack-plugin
 ```
@@ -199,7 +221,7 @@ module.exports = {
     //"sideEffect": ["./src/common/polyfill.js"]
 }
 ```
-##### Scope Hoisting  
+###### Scope Hoisting  
 将所有模块的代码按照引用顺序放在一个函数作用域里，通过适当的重命名防止变量名冲突  
 ==减少函数声明代码和内存开销==
 ```
@@ -212,7 +234,7 @@ module.exports = {
   ]
 }
 ```
-##### DLL
+###### DLL
 dll（动态链接库）：使用dll对公共库进行提前打包，可大大提升构建速度。公共库一般情况下不会有改动，这些模块只需要编译一次即可，所以可提前打包好。在主程序后续构建时如果检测到该公共库已通过dll打包了，就不再对其编译而是直接从动态链接库中获取  
 实现dll打包需要以下三步：  
 1. 抽取公共库，打包到一个或多个动态链接库中
