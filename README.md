@@ -331,7 +331,7 @@ module.exports = function (source) {
 + ==compilation== 暴露了与模块和依赖有关的粒度更小的事件钩子
 + 插件需在其原型上绑定apply方法，才能访问 compiler 实例
 + 传给每个插件的 compiler 和 compilation对象是同一个引用，若在一个插件中修改它们的属性，会影响后续插件
-+ 找出合适的事件点去完成想要的功能,例如
++ 使用合适的生命周期钩子完成想要的功能,例如
    + emit: 输出 asset 到 output 目录之前执行(emit 事件是修改 Webpack 输出资源的最后时机)
    + watch-run: 在监听模式下，一个新的 compilation 触发之后，但在 compilation 实际开始之前执行 (当依赖的文件发生变化时会触发)
 + 异步事件需在插件处理完后调用回调函数通知 Webpack 进入下一个流程，不然会卡住
